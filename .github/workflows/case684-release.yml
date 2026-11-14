@@ -1,0 +1,64 @@
+name: Publish verified Case 684 source
+on:
+  push:
+    branches: [case684-release-20261114]
+permissions:
+  contents: write
+jobs:
+  publish:
+    if: github.repository == 'michaelpaul03/praia-digital-apps'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out existing main history
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Require the reviewed main baseline
+        run: test "$(git rev-parse HEAD)" = "24ddfdc3dc589509d8f27445d347480180d201a6"
+      - name: Download the tested source archive
+        env:
+          SOURCE_URL: https://backend.composio.dev/api/v3/sl/9s0sSaTsde
+          SOURCE_SHA: e423d609afe27d2dc76efd963c875805fa590c02c2a0bbdd431767f4680bbe7a
+        run: |
+          curl --fail --location --retry 3 "$SOURCE_URL" --output /tmp/case684-source.zip
+          echo "$SOURCE_SHA  /tmp/case684-source.zip" | sha256sum --check
+      - name: Extract only the reviewed source paths
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path, PurePosixPath
+          import zipfile
+          with zipfile.ZipFile('/tmp/case684-source.zip') as archive:
+              records = archive.infolist()
+              assert len(records) == 36, 'Unexpected source inventory'
+              for entry in records:
+                  path = PurePosixPath(entry.filename)
+                  assert not path.is_absolute() and '..' not in path.parts and '.git' not in path.parts
+                  assert not entry.is_dir() and (entry.external_attr >> 16) & 0o170000 != 0o120000
+                  if str(path).startswith('.github/'):
+                      assert str(path) == '.github/workflows/quality.yml'
+                      continue
+                  destination = Path(str(path))
+                  destination.parent.mkdir(parents=True, exist_ok=True)
+                  destination.write_bytes(archive.read(entry))
+          PY
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Run all 89 domain and boundary regressions
+        run: node --test tests/*.test.mjs
+      - name: Validate the production package and preserved MIT license
+        run: python3 tools/build.py --output /tmp/case684-production
+      - name: Commit and push reviewed application files to main
+        run: |
+          git diff --exit-code -- LICENSE
+          git add --all
+          git diff --cached --check
+          git diff --cached --exit-code -- LICENSE
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Complete Case 684 connected application platform'
+          git push origin HEAD:main
+          echo "Published source commit: $(git rev-parse HEAD)" >> "$GITHUB_STEP_SUMMARY"
+          git show --stat --oneline HEAD
