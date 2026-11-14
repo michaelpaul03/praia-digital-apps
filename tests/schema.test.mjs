@@ -1,0 +1,32 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { validateData, parseEnvelope, parseWorkspaceBackup, storageKey } from '../assets/js/schema.js';
+import { parseICS } from '../assets/js/core.js';
+const backup=JSON.parse(readFileSync(new URL('./fixtures/workspace.json',import.meta.url),'utf8'));
+const data=key=>JSON.parse(backup.storage[storageKey(key)]).data;
+const clone=value=>structuredClone(value);
+for(const key of ['property','calendar','splitter','trip','guide'])test(`valid saved ${key} workspace crosses the schema boundary`,()=>{const d=data(key);assert.equal(validateData(key,d),d);});
+// Validate value equivalence, not object identity, for independently parsed fixtures.
+for(const key of ['property','calendar','splitter','trip','guide'])test(`versioned ${key} envelope is readable`,()=>assert.deepEqual(parseEnvelope(key,backup.storage[storageKey(key)]).data,data(key)));
+test('workspace backup restores only recognized non-null records',()=>{const b=clone(backup);b.storage[storageKey('guide')]=null;assert.equal(parseWorkspaceBackup(JSON.stringify(b)).length,4);});
+test('workspace backup rejects invalid JSON, versions, unknown keys and empty records',()=>{
+ assert.throws(()=>parseWorkspaceBackup('{bad'),/valid JSON/);
+ assert.throws(()=>parseWorkspaceBackup(JSON.stringify({...backup,version:2})),/version 1/);
+ assert.throws(()=>parseWorkspaceBackup(JSON.stringify({...backup,storage:{unexpected:'{}'}})),/unrecognized/);
+ assert.throws(()=>parseWorkspaceBackup(JSON.stringify({...backup,storage:{}})),/no saved/);
+});
+test('an invalid workspace prevents the whole backup from being accepted',()=>{const b=clone(backup);b.storage[storageKey('trip')]='{}';assert.throws(()=>parseWorkspaceBackup(JSON.stringify(b)));});
+test('storage envelope rejects corrupt JSON, invalid timestamps and unknown versions',()=>{for(const raw of ['{bad',JSON.stringify({version:2,data:data('trip'),updatedAt:'2026-11-14T00:00:00Z'}),JSON.stringify({version:1,data:data('trip'),updatedAt:'bad'})])assert.throws(()=>parseEnvelope('trip',raw));});
+test('HTML and selector syntax cannot enter entity identifiers',()=>{for(const id of ['x\" onmouseover=\"alert(1)','<img src=x>','__proto__','constructor','prototype']){const d=data('guide');d.places[0].id=id;assert.throws(()=>validateData('guide',d),/ID/);}});
+test('reserved object keys cannot cross the backup boundary',()=>{const d=data('property');d.properties[0].ratings=JSON.parse('{"__proto__":5}');assert.throws(()=>validateData('property',d),/reserved/);});
+test('duplicate entity IDs and criterion names are rejected',()=>{const d=data('property');d.properties[1].id=d.properties[0].id;assert.throws(()=>validateData('property',d),/unique/);d.properties[1].id='other';d.criteria[1].name=d.criteria[0].name;assert.throws(()=>validateData('property',d),/unique/);});
+test('invalid ratings, weights and unsupported currencies are rejected',()=>{const d=data('property');d.properties[0].ratings['criterion-0']=11;assert.throws(()=>validateData('property',d));d.properties[0].ratings['criterion-0']=5;d.criteria.forEach(c=>c.weight=0);assert.throws(()=>validateData('property',d),/positive/);const s=data('splitter');s.groups[0].currency='JPY';assert.throws(()=>validateData('splitter',s),/currency/);});
+test('javascript website URLs cannot be restored',()=>{const d=data('guide');d.places[0].website='javascript:alert(1)';assert.throws(()=>validateData('guide',d),/http/);});
+test('activities outside travel dates and invalid times cannot be restored',()=>{const d=data('trip');d.trips[0].activities[0].date='2026-11-19';assert.throws(()=>validateData('trip',d),/outside/);d.trips[0].activities[0].date='2026-11-16';d.trips[0].activities[0].time='25:00';assert.throws(()=>validateData('trip',d),/time/);});
+test('expense payers and nonzero shares must refer to real participants',()=>{const d=data('splitter');d.groups[0].expenses[0].payer='missing';assert.throws(()=>validateData('splitter',d),/payer/);d.groups[0].expenses[0].payer='qa-person-0';d.groups[0].expenses[0].weights.extra=1;assert.throws(()=>validateData('splitter',d),/unknown participant/);});
+test('calendar event dates, end ordering and availability types are validated',()=>{const d=data('calendar');d.events[0].end=d.events[0].start-1;assert.throws(()=>validateData('calendar',d));d.events[0].end=d.events[0].start;d.events[0].transparent='false';assert.throws(()=>validateData('calendar',d),/true or false/);});
+test('ICS identity strings may contain punctuation but are escaped by the UI',()=>{const d=data('calendar');d.events[0].id='ics:user\" punctuation:123';assert.doesNotThrow(()=>validateData('calendar',d));});
+test('ICS byte limit counts multibyte content',()=>assert.throws(()=>parseICS('é'.repeat(1100000)),/2 MB/));
+test('an event cannot specify both DTEND and DURATION',()=>assert.throws(()=>parseICS('BEGIN:VCALENDAR\nBEGIN:VEVENT\nDTSTART:20261116T090000Z\nDTEND:20261116T100000Z\nDURATION:PT1H\nEND:VEVENT\nEND:VCALENDAR'),/both/));
+test('expanded occurrences are bounded before oversized intermediate accumulation',()=>{const events=Array.from({length:12},(_,i)=>`BEGIN:VEVENT\nUID:bounded-${i}\nDTSTART:20260101T090000Z\nDURATION:PT1H\nRRULE:FREQ=DAILY;COUNT=500\nEND:VEVENT`).join('\n');assert.throws(()=>parseICS(`BEGIN:VCALENDAR\n${events}\nEND:VCALENDAR`),/5,000/);});

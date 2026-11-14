@@ -1,0 +1,427 @@
+{
+  "tested_at_utc": "2026-11-14T06:04:36.968523+00:00",
+  "environment": {
+    "node": "24.22.1",
+    "python": "3.13.18",
+    "playwright": "1.65.2",
+    "browser": "Chromium",
+    "axe": "4.10.3"
+  },
+  "unit_tests": {
+    "passed": 89,
+    "failed": 0,
+    "original_retained_cases": 63,
+    "new_boundary_cases": 26
+  },
+  "browser": {
+    "base_url": "http://127.0.0.1:8768/praia-digital-apps/",
+    "browser": "Chromium",
+    "cases": [
+      {
+        "test": "__main__.FeatureTests.test_calendar_bad_files_and_unsupported_series_leave_saved_data_safe",
+        "result": "passed",
+        "seconds": 5.513
+      },
+      {
+        "test": "__main__.FeatureTests.test_calendar_import_conflicts_gaps_filters_summaries_and_exports",
+        "result": "passed",
+        "seconds": 7.432
+      },
+      {
+        "test": "__main__.FeatureTests.test_expense_equal_weighted_edit_delete_balances_exports",
+        "result": "passed",
+        "seconds": 10.792
+      },
+      {
+        "test": "__main__.FeatureTests.test_guide_crud_categories_collections_search_favorites_details_exports",
+        "result": "passed",
+        "seconds": 7.838
+      },
+      {
+        "test": "__main__.FeatureTests.test_hub_search_filters_featured_and_workspace_export",
+        "result": "passed",
+        "seconds": 3.237
+      },
+      {
+        "test": "__main__.FeatureTests.test_participant_management_group_validation_and_currency_lock",
+        "result": "passed",
+        "seconds": 3.494
+      },
+      {
+        "test": "__main__.FeatureTests.test_property_crud_comparison_scores_favorites_exports",
+        "result": "passed",
+        "seconds": 8.046
+      },
+      {
+        "test": "__main__.FeatureTests.test_property_custom_criteria_validation_and_reranking",
+        "result": "passed",
+        "seconds": 4.171
+      },
+      {
+        "test": "__main__.FeatureTests.test_real_property_place_trip_expense_calendar_handoffs",
+        "result": "passed",
+        "seconds": 15.477
+      },
+      {
+        "test": "__main__.FeatureTests.test_trip_crud_move_budget_date_validation_and_all_exports",
+        "result": "passed",
+        "seconds": 8.271
+      },
+      {
+        "test": "__main__.StorageTests.test_corrupt_storage_is_not_overwritten_and_raw_backup_is_available",
+        "result": "passed",
+        "seconds": 6.288
+      },
+      {
+        "test": "__main__.StorageTests.test_invalid_or_partially_failed_restore_never_leaves_half_a_workspace",
+        "result": "passed",
+        "seconds": 2.666
+      },
+      {
+        "test": "__main__.StorageTests.test_storage_quota_failure_rolls_back_memory_and_does_not_report_success",
+        "result": "passed",
+        "seconds": 2.969
+      },
+      {
+        "test": "__main__.StorageTests.test_two_tabs_cannot_silently_overwrite_newer_saved_data",
+        "result": "passed",
+        "seconds": 3.061
+      },
+      {
+        "test": "__main__.StorageTests.test_workspace_backup_restore_roundtrip_preserves_all_five_apps",
+        "result": "passed",
+        "seconds": 5.285
+      },
+      {
+        "test": "__main__.SurfaceTests.test_direct_entry_refresh_paths_internal_links_and_loaded_assets",
+        "result": "passed",
+        "seconds": 23.754
+      },
+      {
+        "test": "__main__.SurfaceTests.test_keyboard_skip_link_mobile_menu_dialog_focus_trap_and_escape",
+        "result": "passed",
+        "seconds": 3.696
+      },
+      {
+        "test": "__main__.SurfaceTests.test_mobile_tablet_desktop_populated_layouts_and_navigation",
+        "result": "passed",
+        "seconds": 9.743
+      },
+      {
+        "test": "__main__.SurfaceTests.test_wcag_axe_on_all_pages_and_edit_dialogs",
+        "result": "passed",
+        "seconds": 15.576
+      }
+    ],
+    "layout_matrix": [
+      {
+        "page": "hub",
+        "viewport": [
+          375,
+          812
+        ],
+        "populated": true,
+        "overflow": false,
+        "navigation": "passed"
+      },
+      {
+        "page": "property-planner",
+        "viewport": [
+          375,
+          812
+        ],
+        "populated": true,
+        "overflow": false,
+        "navigation": "passed"
+      },
+      {
+        "page": "calendar-auditor",
+        "viewport": [
+          375,
+          812
+        ],
+        "populated": true,
+        "overflow": false,
+        "navigation": "passed"
+      },
+      {
+        "page": "stay-splitter",
+        "viewport": [
+          375,
+          812
+        ],
+        "populated": true,
+        "overflow": false,
+        "navigation": "passed"
+      },
+      {
+        "page": "trip-planner",
+        "viewport": [
+          375,
+          812
+        ],
+        "populated": true,
+        "overflow": false,
+        "navigation": "passed"
+      },
+      {
+        "page": "local-guide",
+        "viewport": [
+          375,
+          812
+        ],
+        "populated": true,
+        "overflow": false,
+        "navigation": "passed"
+      },
+      {
+        "page": "hub",
+        "viewport": [
+          768,
+          1024
+        ],
+        "populated": true,
+        "overflow": false,
+        "navigation": "passed"
+      },
+      {
+        "page": "property-planner",
+        "viewport": [
+          768,
+          1024
+        ],
+        "populated": true,
+        "overflow": false,
+        "navigation": "passed"
+      },
+      {
+        "page": "calendar-auditor",
+        "viewport": [
+          768,
+          1024
+        ],
+        "populated": true,
+        "overflow": false,
+        "navigation": "passed"
+      },
+      {
+        "page": "stay-splitter",
+        "viewport": [
+          768,
+          1024
+        ],
+        "populated": true,
+        "overflow": false,
+        "navigation": "passed"
+      },
+      {
+        "page": "trip-planner",
+        "viewport": [
+          768,
+          1024
+        ],
+        "populated": true,
+        "overflow": false,
+        "navigation": "passed"
+      },
+      {
+        "page": "local-guide",
+        "viewport": [
+          768,
+          1024
+        ],
+        "populated": true,
+        "overflow": false,
+        "navigation": "passed"
+      },
+      {
+        "page": "hub",
+        "viewport": [
+          1440,
+          1000
+        ],
+        "populated": true,
+        "overflow": false,
+        "navigation": "passed"
+      },
+      {
+        "page": "property-planner",
+        "viewport": [
+          1440,
+          1000
+        ],
+        "populated": true,
+        "overflow": false,
+        "navigation": "passed"
+      },
+      {
+        "page": "calendar-auditor",
+        "viewport": [
+          1440,
+          1000
+        ],
+        "populated": true,
+        "overflow": false,
+        "navigation": "passed"
+      },
+      {
+        "page": "stay-splitter",
+        "viewport": [
+          1440,
+          1000
+        ],
+        "populated": true,
+        "overflow": false,
+        "navigation": "passed"
+      },
+      {
+        "page": "trip-planner",
+        "viewport": [
+          1440,
+          1000
+        ],
+        "populated": true,
+        "overflow": false,
+        "navigation": "passed"
+      },
+      {
+        "page": "local-guide",
+        "viewport": [
+          1440,
+          1000
+        ],
+        "populated": true,
+        "overflow": false,
+        "navigation": "passed"
+      }
+    ],
+    "accessibility": [
+      {
+        "page": "hub",
+        "state": "populated",
+        "violations": []
+      },
+      {
+        "page": "property-planner",
+        "state": "populated",
+        "violations": []
+      },
+      {
+        "page": "property-planner",
+        "state": "dialog",
+        "violations": []
+      },
+      {
+        "page": "calendar-auditor",
+        "state": "populated",
+        "violations": []
+      },
+      {
+        "page": "stay-splitter",
+        "state": "populated",
+        "violations": []
+      },
+      {
+        "page": "stay-splitter",
+        "state": "dialog",
+        "violations": []
+      },
+      {
+        "page": "trip-planner",
+        "state": "populated",
+        "violations": []
+      },
+      {
+        "page": "trip-planner",
+        "state": "dialog",
+        "violations": []
+      },
+      {
+        "page": "local-guide",
+        "state": "populated",
+        "violations": []
+      },
+      {
+        "page": "local-guide",
+        "state": "dialog",
+        "violations": []
+      }
+    ],
+    "internal_links_and_assets": [
+      {
+        "url": "http://127.0.0.1:8768/praia-digital-apps/",
+        "http": 200
+      },
+      {
+        "url": "http://127.0.0.1:8768/praia-digital-apps/LICENSE",
+        "http": 200
+      },
+      {
+        "url": "http://127.0.0.1:8768/praia-digital-apps/assets/css/style.css",
+        "http": 200
+      },
+      {
+        "url": "http://127.0.0.1:8768/praia-digital-apps/assets/icons/favicon.svg",
+        "http": 200
+      },
+      {
+        "url": "http://127.0.0.1:8768/praia-digital-apps/assets/js/main.js",
+        "http": 200
+      },
+      {
+        "url": "http://127.0.0.1:8768/praia-digital-apps/calendar-auditor/",
+        "http": 200
+      },
+      {
+        "url": "http://127.0.0.1:8768/praia-digital-apps/calendar-auditor/?trip=qa-trip",
+        "http": 200
+      },
+      {
+        "url": "http://127.0.0.1:8768/praia-digital-apps/local-guide/",
+        "http": 200
+      },
+      {
+        "url": "http://127.0.0.1:8768/praia-digital-apps/local-guide/?trip=qa-trip",
+        "http": 200
+      },
+      {
+        "url": "http://127.0.0.1:8768/praia-digital-apps/property-planner/",
+        "http": 200
+      },
+      {
+        "url": "http://127.0.0.1:8768/praia-digital-apps/stay-splitter/",
+        "http": 200
+      },
+      {
+        "url": "http://127.0.0.1:8768/praia-digital-apps/stay-splitter/?trip=qa-trip",
+        "http": 200
+      },
+      {
+        "url": "http://127.0.0.1:8768/praia-digital-apps/trip-planner/",
+        "http": 200
+      },
+      {
+        "url": "http://127.0.0.1:8768/praia-digital-apps/trip-planner/?place=qa-place-1",
+        "http": 200
+      },
+      {
+        "url": "http://127.0.0.1:8768/praia-digital-apps/trip-planner/?place=qa-place-2",
+        "http": 200
+      },
+      {
+        "url": "http://127.0.0.1:8768/praia-digital-apps/trip-planner/?property=qa-property-1",
+        "http": 200
+      },
+      {
+        "url": "http://127.0.0.1:8768/praia-digital-apps/trip-planner/?property=qa-property-2",
+        "http": 200
+      },
+      {
+        "url": "http://127.0.0.1:8768/praia-digital-apps/trip-planner/?trip=qa-trip",
+        "http": 200
+      }
+    ],
+    "tests_run": 19,
+    "successful": true
+  }
+}
